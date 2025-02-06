@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: classifier-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://pg_db:5432/classifier?currentSchema=classifier_data
+    username: calssifier_app_user
+    password: 13245
+    hikari:
+      maximum-pool-size: 15
+
+app:
+  jwt:
+    secret: NmIxNTkwNWUtYWQwZS00ZGM4LWE4MzctZjdlNDQ4ZTllMDlh
+    issuer: ITAcademy
+
+client:
+  account-service:
+    url: http://account-service:8080

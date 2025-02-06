@@ -1,0 +1,49 @@
+spring:
+  application:
+   name: user-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://pg_db:5432/users?currentSchema=user_data
+    username: user_app_user
+    password: 13245
+    hikari:
+      maximum-pool-size: 15
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+  mail:
+    host: smtp.yandex.ru
+    port: 465
+    username: javatest333@yandex.by
+    password: ifxuokbybugqevmr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+  task:
+    execution:
+      pool:
+        core-pool-size: 5
+        max-pool-size: 10
+        queue-capacity: 20
+      shutdown:
+        await-termination: true
+        await-termination-period: 45
+
+app:
+  jwt:
+    secret: NmIxNTkwNWUtYWQwZS00ZGM4LWE4MzctZjdlNDQ4ZTllMDlh
+    issuer: ITAcademy
+
+verification:
+  url: http://localhost/api/v1/cabinet/verification
+  subject: Верификация пользователя PersonalFinance
+
+
+
+

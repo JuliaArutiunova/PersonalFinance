@@ -1,0 +1,44 @@
+name: finance
+
+services:
+  pg_db:
+    build: postgresql
+    image: postgresql-finance:1.0.5
+    environment:
+      POSTGRES_USER: finance_admin
+      POSTGRES_PASSWORD: 123
+    networks:
+      - finance-network
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@finance.com
+      PGADMIN_DEFAULT_PASSWORD: finance
+    ports:
+      - 82:80
+    networks:
+      - finance-network
+  proxy:
+    build: proxy
+    image: proxy-finance:1.0.0
+    ports:
+      - 80:80
+    networks:
+      - finance-network
+  user-service:
+    build: user-service
+    image: user-service-finance:1.0.3
+    networks:
+      - finance-network
+  classifier-service:
+    build: classifier-service
+    image: classifier-service-finance:1.0.5
+    networks:
+      - finance-network
+  account-service:
+    build: account-service
+    image: account-service-finance:1.0.5
+    networks:
+      - finance-network
+networks:
+  finance-network:

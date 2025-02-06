@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: account-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://pg_db:5432/account?currentSchema=account_data
+    username: account_app_user
+    password: 13245
+    hikari:
+      maximum-pool-size: 15
+
+app:
+  jwt:
+    secret: NmIxNTkwNWUtYWQwZS00ZGM4LWE4MzctZjdlNDQ4ZTllMDlh
+    issuer: ITAcademy
+
+client:
+  currency-api:
+    url: https://api.currencyapi.com/v3/latest
+    key: cur_live_BiQWsl5AFQDOQJ22KCABuZGKz2MbADW772GLjzRU
+
+  classifier-service:
+    url: http://classifier-service:8080/classifier_data/currency
+
