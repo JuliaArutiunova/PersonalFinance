@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/account
+    username: postgres
+    password: 13245
+    hikari:
+      maximum-pool-size: 15
+
+server:
+  port: 8092
+
+client:
+  classifier-service:
+    url: http://localhost:8091/classifier_data/currency

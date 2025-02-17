@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/users
+    username: postgres
+    password: 13245
+    hikari:
+      maximum-pool-size: 15
+
+server:
+  port: 8090
+
+verification:
+  url: http://localhost:8090/cabinet/verification
+  subject: Верификация пользователя PersonalFinance

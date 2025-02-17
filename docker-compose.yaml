@@ -28,16 +28,22 @@ services:
   user-service:
     build: user-service
     image: user-service-finance:1.0.3
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     networks:
       - finance-network
   classifier-service:
     build: classifier-service
     image: classifier-service-finance:1.0.5
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     networks:
       - finance-network
   account-service:
     build: account-service
     image: account-service-finance:1.0.5
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
     networks:
       - finance-network
 networks:
