@@ -13,6 +13,7 @@
         <module>classifier-service</module>
         <module>account-service</module>
         <module>pf-common-lib</module>
+        <module>audit-service</module>
     </modules>
 
     <properties>

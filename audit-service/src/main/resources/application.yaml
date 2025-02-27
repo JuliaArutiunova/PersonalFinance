@@ -1,0 +1,14 @@
+spring:
+  application:
+   name: audit-service
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+
+app:
+  jwt:
+    secret: NmIxNTkwNWUtYWQwZS00ZGM4LWE4MzctZjdlNDQ4ZTllMDlh
+    issuer: ITAcademy
+
+

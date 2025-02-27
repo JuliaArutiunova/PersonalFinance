@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://pg_db:5432/audit?currentSchema=audit_data
+    username: audit_app_user
+    password: 13245
+    hikari:
+      maximum-pool-size: 15
