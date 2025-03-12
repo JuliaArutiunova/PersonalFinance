@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface IAuditService {
     void create(ActionInfoDto actionInfoDto);
     AuditDto get(UUID id);
-    PageDto<AuditDto> getPage(PaginationDto paginationDto);
+    PageDto<AuditDto> getPage(int pageNumber, int size);
 }
