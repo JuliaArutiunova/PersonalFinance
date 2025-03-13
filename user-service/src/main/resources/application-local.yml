@@ -13,3 +13,7 @@ server:
 verification:
   url: http://localhost:8090/cabinet/verification
   subject: Верификация пользователя PersonalFinance
+
+client:
+  audit-service:
+    url: http://localhost:8093
