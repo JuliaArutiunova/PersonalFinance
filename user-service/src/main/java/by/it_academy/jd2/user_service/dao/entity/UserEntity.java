@@ -1,5 +1,6 @@
 package by.it_academy.jd2.user_service.dao.entity;
 
+import by.it_academy.lib.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -6,9 +6,9 @@ import by.it_academy.jd2.user_service.dto.UserLoginDto;
 import by.it_academy.jd2.user_service.dto.UserRegistrationDto;
 import by.it_academy.jd2.user_service.service.api.IAuthenticationService;
 import by.it_academy.jd2.user_service.service.api.IUserService;
-import by.it_academy.jd2.user_service.dao.entity.UserRole;
 import by.it_academy.jd2.user_service.dao.entity.UserStatus;
 import by.it_academy.lib.dto.TokenInfoDto;
+import by.it_academy.lib.enums.UserRole;
 import org.springframework.stereotype.Service;
 
 @Service

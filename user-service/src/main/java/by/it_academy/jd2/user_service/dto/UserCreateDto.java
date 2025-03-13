@@ -1,8 +1,8 @@
 package by.it_academy.jd2.user_service.dto;
 
-import by.it_academy.jd2.user_service.dao.entity.UserRole;
 import by.it_academy.jd2.user_service.dao.entity.UserStatus;
 
+import by.it_academy.lib.enums.UserRole;
 import by.it_academy.lib.validation.EnumValue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
