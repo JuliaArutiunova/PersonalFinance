@@ -29,8 +29,8 @@ public class AuditDto {
     @JsonProperty(index = 4)
     private String text;
 
-    @JsonProperty(index = 5)
-    private EssenceType type;
+    @JsonProperty(value = "type",index = 5)
+    private EssenceType essenceType;
 
     @JsonProperty(value = "id", index = 6)
     private UUID entityId;

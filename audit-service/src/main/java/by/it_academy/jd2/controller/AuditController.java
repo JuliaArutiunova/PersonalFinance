@@ -23,7 +23,7 @@ public class AuditController {
 
     @GetMapping
     public PageDto<AuditDto> getPage(@Valid PaginationDto paginationDto) {
-        return auditService.getPage(paginationDto);
+        return auditService.getPage(paginationDto.getPage(), paginationDto.getSize());
     }
 
     @GetMapping("/{uuid}")
