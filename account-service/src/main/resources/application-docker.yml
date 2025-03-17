@@ -10,3 +10,5 @@ spring:
 client:
   classifier-service:
     url: http://classifier-service:8080/classifier_data/currency
+  audit-service:
+    url: http://audit-service:8080

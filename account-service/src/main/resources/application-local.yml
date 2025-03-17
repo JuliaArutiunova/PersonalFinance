@@ -13,3 +13,5 @@ server:
 client:
   classifier-service:
     url: http://localhost:8091/classifier_data/currency
+  audit-service:
+    url: http://localhost:8093
