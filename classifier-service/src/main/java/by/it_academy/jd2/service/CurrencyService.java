@@ -6,13 +6,17 @@ import by.it_academy.jd2.service.client.AccountClient;
 import by.it_academy.jd2.dao.api.ICurrencyDao;
 import by.it_academy.jd2.dao.entity.CurrencyEntity;
 import by.it_academy.jd2.service.api.ICurrencyService;
+import by.it_academy.jd2.service.client.AuditClient;
+import by.it_academy.lib.dto.ActionInfoDto;
 import by.it_academy.lib.dto.PageDto;
+import by.it_academy.lib.enums.EssenceType;
 import by.it_academy.lib.exception.PageNotExistsException;
 import by.it_academy.lib.exception.RecordAlreadyExistsException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,14 +27,17 @@ public class CurrencyService implements ICurrencyService {
 
     private final ICurrencyDao currencyDao;
     private final ModelMapper modelMapper;
-
     private final AccountClient accountClient;
+    private final AuditClient auditClient;
+    private final UserHolder userHolder;
 
-    public CurrencyService(ICurrencyDao currencyDao,
-                           ModelMapper modelMapper, AccountClient accountClient) {
+    public CurrencyService(ICurrencyDao currencyDao, ModelMapper modelMapper, AccountClient accountClient,
+                           AuditClient auditClient, UserHolder userHolder) {
         this.currencyDao = currencyDao;
         this.modelMapper = modelMapper;
         this.accountClient = accountClient;
+        this.auditClient = auditClient;
+        this.userHolder = userHolder;
     }
 
 
@@ -51,7 +58,7 @@ public class CurrencyService implements ICurrencyService {
 
         accountClient.saveCurrencyId(currencyEntity.getId());
 
-
+        sendCurrencyCreationAudit(currencyEntity.getId());
     }
 
     @Override
@@ -64,7 +71,7 @@ public class CurrencyService implements ICurrencyService {
             throw new PageNotExistsException("Страницы с таким номером не существует");
         }
 
-        if(page.isEmpty()){
+        if (page.isEmpty()) {
             return new PageDto<>();
         }
 
@@ -83,5 +90,14 @@ public class CurrencyService implements ICurrencyService {
         return names;
     }
 
+    @Async
+    private void sendCurrencyCreationAudit(UUID entityId) {
+        auditClient.createAudit(ActionInfoDto.builder()
+                .userId(userHolder.getUserId())
+                .entityId(entityId)
+                .essenceType(EssenceType.CURRENCY)
+                .text("Создана новая валюта")
+                .build());
+    }
 
 }

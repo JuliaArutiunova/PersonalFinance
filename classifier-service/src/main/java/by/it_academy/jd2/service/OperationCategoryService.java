@@ -5,7 +5,10 @@ import by.it_academy.jd2.dto.OperationCategoryCreateDto;
 import by.it_academy.jd2.dto.OperationCategoryDto;
 import by.it_academy.jd2.service.client.AccountClient;
 import by.it_academy.jd2.dao.entity.OperationCategoryEntity;
+import by.it_academy.jd2.service.client.AuditClient;
+import by.it_academy.lib.dto.ActionInfoDto;
 import by.it_academy.lib.dto.PageDto;
+import by.it_academy.lib.enums.EssenceType;
 import by.it_academy.lib.exception.PageNotExistsException;
 import by.it_academy.jd2.service.api.IOperationCategoryService;
 import by.it_academy.jd2.dao.api.IOperationCategoryDao;
@@ -14,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +29,17 @@ public class OperationCategoryService implements IOperationCategoryService {
 
     private final IOperationCategoryDao operationCategoryDao;
     private final ModelMapper modelMapper;
-
     private final AccountClient accountClient;
 
-    public OperationCategoryService(IOperationCategoryDao operationCategoryDao, ModelMapper modelMapper, AccountClient accountClient) {
+    private final AuditClient auditClient;
+    private final UserHolder userHolder;
+
+    public OperationCategoryService(IOperationCategoryDao operationCategoryDao, ModelMapper modelMapper, AccountClient accountClient, AuditClient auditClient, UserHolder userHolder) {
         this.operationCategoryDao = operationCategoryDao;
         this.modelMapper = modelMapper;
         this.accountClient = accountClient;
+        this.auditClient = auditClient;
+        this.userHolder = userHolder;
     }
 
 
@@ -51,6 +59,7 @@ public class OperationCategoryService implements IOperationCategoryService {
 
         accountClient.saveOperationCategoryId(operationCategory.getId());
 
+        sendOperationCategoryCreationAudit(operationCategory.getId());
     }
 
     @Override
@@ -62,7 +71,7 @@ public class OperationCategoryService implements IOperationCategoryService {
             throw new PageNotExistsException("Страницы с таким номером не существует");
         }
 
-        if(page.isEmpty()){
+        if (page.isEmpty()) {
             return new PageDto<>();
         }
 
@@ -70,5 +79,13 @@ public class OperationCategoryService implements IOperationCategoryService {
         }.getType());
     }
 
-
+    @Async
+    private void sendOperationCategoryCreationAudit(UUID entityId) {
+        auditClient.createAudit(ActionInfoDto.builder()
+                .userId(userHolder.getUserId())
+                .entityId(entityId)
+                .essenceType(EssenceType.OPERATION_CATEGORY)
+                .text("Создана новая категория операций")
+                .build());
+    }
 }
