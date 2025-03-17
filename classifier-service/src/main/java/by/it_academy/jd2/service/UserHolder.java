@@ -10,5 +10,4 @@ public class UserHolder {
     public UUID getUserId(){
         return (UUID) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
-
 }
