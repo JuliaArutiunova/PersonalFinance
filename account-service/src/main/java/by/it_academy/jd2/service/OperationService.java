@@ -9,9 +9,12 @@ import by.it_academy.jd2.dto.OperationCreateDto;
 import by.it_academy.jd2.dto.OperationDto;
 import by.it_academy.jd2.dto.RecalculationDto;
 import by.it_academy.jd2.service.api.*;
+import by.it_academy.jd2.service.feign.AuditClient;
 import by.it_academy.jd2.service.utils.MoneyOperator;
+import by.it_academy.lib.dto.ActionInfoDto;
 import by.it_academy.lib.dto.PageDto;
 import by.it_academy.lib.dto.PaginationDto;
+import by.it_academy.lib.enums.EssenceType;
 import by.it_academy.lib.exception.DataChangedException;
 import by.it_academy.lib.exception.PageNotExistsException;
 import by.it_academy.lib.exception.RecordNotFoundException;
@@ -19,6 +22,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,17 +39,21 @@ public class OperationService implements IOperationService {
     private final ICurrencyService currencyService;
     private final ModelMapper modelMapper;
     private final MoneyOperator moneyOperator;
+    private final UserHolder userHolder;
+    private final AuditClient auditClient;
 
     public OperationService(IOperationDao operationDao, IAccountService accountService,
                             IOperationCategoryService operationCategoryService,
                             ICurrencyService currencyService, ModelMapper modelMapper,
-                            MoneyOperator moneyOperator) {
+                            MoneyOperator moneyOperator, UserHolder userHolder, AuditClient auditClient) {
         this.operationDao = operationDao;
         this.accountService = accountService;
         this.operationCategoryService = operationCategoryService;
         this.currencyService = currencyService;
         this.modelMapper = modelMapper;
         this.moneyOperator = moneyOperator;
+        this.userHolder = userHolder;
+        this.auditClient = auditClient;
     }
 
     @Override
@@ -77,7 +85,7 @@ public class OperationService implements IOperationService {
 
         operationDao.saveAndFlush(operationEntity);
 
-
+        sendToAudit(operationEntity.getId(), "Совершена операция по счету");
     }
 
     @Override
@@ -145,6 +153,8 @@ public class OperationService implements IOperationService {
 
         operationDao.saveAndFlush(operationEntity);
 
+        sendToAudit(operationId, "Изменена операция по счету");
+
     }
 
     @Override
@@ -164,6 +174,18 @@ public class OperationService implements IOperationService {
 
         operationDao.delete(operationEntity);
 
+        sendToAudit(operationId, "Удалена операция по счету");
+
+    }
+
+    @Async
+    private void sendToAudit(UUID entityId, String message) {
+        auditClient.createAudit(ActionInfoDto.builder()
+                .userId(userHolder.getUserId())
+                .entityId(entityId)
+                .essenceType(EssenceType.OPERATION)
+                .text(message)
+                .build());
     }
 
 

@@ -8,8 +8,11 @@ import by.it_academy.jd2.dto.AccountCreateDto;
 import by.it_academy.jd2.dto.AccountDto;
 import by.it_academy.jd2.service.api.IAccountService;
 import by.it_academy.jd2.service.api.ICurrencyService;
+import by.it_academy.jd2.service.feign.AuditClient;
 import by.it_academy.jd2.service.utils.MoneyOperator;
+import by.it_academy.lib.dto.ActionInfoDto;
 import by.it_academy.lib.dto.PageDto;
+import by.it_academy.lib.enums.EssenceType;
 import by.it_academy.lib.exception.DataChangedException;
 import by.it_academy.lib.exception.PageNotExistsException;
 import by.it_academy.lib.exception.RecordNotFoundException;
@@ -17,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,13 +37,16 @@ public class AccountService implements IAccountService {
     private final MoneyOperator moneyOperator;
     private final ModelMapper modelMapper;
 
+    private final AuditClient auditClient;
+
     public AccountService(IAccountDao accountDao, ICurrencyService currencyService,
-                          UserHolder userHolder, MoneyOperator moneyOperator, ModelMapper modelMapper) {
+                          UserHolder userHolder, MoneyOperator moneyOperator, ModelMapper modelMapper, AuditClient auditClient) {
         this.accountDao = accountDao;
         this.currencyService = currencyService;
         this.userHolder = userHolder;
         this.moneyOperator = moneyOperator;
         this.modelMapper = modelMapper;
+        this.auditClient = auditClient;
     }
 
     @Override
@@ -60,6 +67,9 @@ public class AccountService implements IAccountService {
         account.setBalance(BigDecimal.ZERO);
 
         accountDao.saveAndFlush(account);
+
+        sendToAudit(account.getId(), "Создан новый счет");
+;
 
     }
 
@@ -122,12 +132,23 @@ public class AccountService implements IAccountService {
         account.setType(AccountType.valueOf(accountCreateDto.getType()));
 
         accountDao.saveAndFlush(account);
+
+        sendToAudit(account.getId(), "Обновлены данные счета");
     }
 
     @Override
     @Transactional
     public void save(AccountEntity accountEntity) {
         accountDao.saveAndFlush(accountEntity);
+    }
+    @Async
+    private void sendToAudit(UUID entityId, String message){
+        auditClient.createAudit(ActionInfoDto.builder()
+                .userId(userHolder.getUserId())
+                .entityId(entityId)
+                .essenceType(EssenceType.ACCOUNT)
+                .text(message)
+                .build());
     }
 
 
