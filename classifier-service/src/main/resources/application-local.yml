@@ -13,3 +13,5 @@ server:
 client:
   account-service:
     url: http://localhost:8092
+  audit-service:
+    url: http://localhost:8093

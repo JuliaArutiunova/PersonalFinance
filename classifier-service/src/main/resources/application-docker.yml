@@ -10,3 +10,5 @@ spring:
 client:
   account-service:
     url: http://account-service:8080
+  audit-service:
+    url: http://audit-service:8080
