@@ -3,7 +3,7 @@ name: finance
 services:
   pg_db:
     build: postgresql
-    image: postgresql-finance:1.0.5
+    image: postgresql-finance:1.0.6
     environment:
       POSTGRES_USER: finance_admin
       POSTGRES_PASSWORD: 123
@@ -20,28 +20,35 @@ services:
       - finance-network
   proxy:
     build: proxy
-    image: proxy-finance:1.0.0
+    image: proxy-finance:1.0.6
     ports:
       - 80:80
     networks:
       - finance-network
   user-service:
     build: user-service
-    image: user-service-finance:1.0.3
+    image: user-service-finance:1.0.6
     environment:
       SPRING_PROFILES_ACTIVE: docker
     networks:
       - finance-network
   classifier-service:
     build: classifier-service
-    image: classifier-service-finance:1.0.5
+    image: classifier-service-finance:1.0.6
     environment:
       SPRING_PROFILES_ACTIVE: docker
     networks:
       - finance-network
   account-service:
     build: account-service
-    image: account-service-finance:1.0.5
+    image: account-service-finance:1.0.6
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - finance-network
+  audit-service:
+    build: audit-service
+    image: audit-service-finance:1.0.6
     environment:
       SPRING_PROFILES_ACTIVE: docker
     networks:
