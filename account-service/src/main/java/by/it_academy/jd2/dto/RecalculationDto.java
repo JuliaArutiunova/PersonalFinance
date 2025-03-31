@@ -5,15 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
 public class RecalculationDto {
     private BigDecimal oldValue;
-    private UUID oldCurrency;
+    private String oldCurrency;
     private BigDecimal newValue;
-    private UUID newCurrency;
+    private String newCurrency;
     private BigDecimal accountBalance;
-    private UUID accountCurrency;
+    private String accountCurrency;
 }

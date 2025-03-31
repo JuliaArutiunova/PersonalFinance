@@ -36,7 +36,6 @@ public class AccountService implements IAccountService {
     private final UserHolder userHolder;
     private final MoneyOperator moneyOperator;
     private final ModelMapper modelMapper;
-
     private final AuditClient auditClient;
 
     public AccountService(IAccountDao accountDao, ICurrencyService currencyService,
@@ -69,7 +68,6 @@ public class AccountService implements IAccountService {
         accountDao.saveAndFlush(account);
 
         sendToAudit(account.getId(), "Создан новый счет");
-;
 
     }
 
@@ -121,7 +119,7 @@ public class AccountService implements IAccountService {
 
             if (account.getBalance().compareTo(BigDecimal.ZERO) != 0) {
                 account.setBalance(moneyOperator.convertBalanceAmount(account.getBalance(),
-                        accountCreateDto.getCurrency(), account.getCurrency().getId()));
+                        newCurrency.getTitle(), account.getCurrency().getTitle()));
             }
 
             account.setCurrency(newCurrency);

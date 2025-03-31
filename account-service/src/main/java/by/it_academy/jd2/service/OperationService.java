@@ -77,8 +77,8 @@ public class OperationService implements IOperationService {
         operationEntity.setCurrency(newCurrency);
 
         BigDecimal newBalance = moneyOperator.calculateBalance(account.getBalance(),
-                operationCreateDto.getValue(), account.getCurrency().getId(),
-                operationCreateDto.getCurrency());
+                operationCreateDto.getValue(), account.getCurrency().getTitle(),
+                newCurrency.getTitle());
 
         account.setBalance(newBalance);
         accountService.save(account);
@@ -139,11 +139,11 @@ public class OperationService implements IOperationService {
             BigDecimal newBalance = moneyOperator.recalculateBalance(
                     RecalculationDto.builder()
                             .oldValue(operationEntity.getValue())
-                            .oldCurrency(operationEntity.getCurrency().getId())
+                            .oldCurrency(operationEntity.getCurrency().getTitle())
                             .newValue(operationCreateDto.getValue())
-                            .newCurrency(operationCreateDto.getCurrency())
+                            .newCurrency(newCurrency.getTitle())
                             .accountBalance(account.getBalance())
-                            .accountCurrency(account.getCurrency().getId())
+                            .accountCurrency(account.getCurrency().getTitle())
                             .build());
 
             operationEntity.setCurrency(newCurrency);
@@ -167,7 +167,7 @@ public class OperationService implements IOperationService {
 
         AccountEntity account = operationEntity.getAccount();
         BigDecimal newBalance = moneyOperator.refundAmount(account.getBalance(), operationEntity.getValue(),
-                account.getCurrency().getId(), operationEntity.getCurrency().getId());
+                account.getCurrency().getTitle(), operationEntity.getCurrency().getTitle());
 
         account.setBalance(newBalance);
         accountService.save(account);
