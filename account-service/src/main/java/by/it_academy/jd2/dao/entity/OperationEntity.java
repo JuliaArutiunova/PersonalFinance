@@ -49,7 +49,7 @@ public class OperationEntity {
 
     @ManyToOne
     @JoinColumn(name = "currency_id", foreignKey = @ForeignKey(name = "currency_FK"))
-    private CurrencyIdEntity currency;
+    private CurrencyInfoEntity currency;
 
 
     @PrePersist

@@ -3,7 +3,7 @@ package by.it_academy.jd2.service;
 import by.it_academy.jd2.dao.api.IAccountDao;
 import by.it_academy.jd2.dao.entity.AccountEntity;
 import by.it_academy.jd2.dao.entity.AccountType;
-import by.it_academy.jd2.dao.entity.CurrencyIdEntity;
+import by.it_academy.jd2.dao.entity.CurrencyInfoEntity;
 import by.it_academy.jd2.dto.AccountCreateDto;
 import by.it_academy.jd2.dto.AccountDto;
 import by.it_academy.jd2.service.api.IAccountService;
@@ -53,7 +53,7 @@ public class AccountService implements IAccountService {
     @Transactional
     public void create(AccountCreateDto accountCreateDto) {
 
-        CurrencyIdEntity currencyId = currencyService.get(accountCreateDto.getCurrency());
+        CurrencyInfoEntity currency = currencyService.get(accountCreateDto.getCurrency());
 
         UUID userId = userHolder.getUserId();
 
@@ -63,7 +63,7 @@ public class AccountService implements IAccountService {
         account.setTitle(accountCreateDto.getTitle());
         account.setDescription(accountCreateDto.getDescription());
         account.setType(AccountType.valueOf(accountCreateDto.getType()));
-        account.setCurrency(currencyId);
+        account.setCurrency(currency);
         account.setBalance(BigDecimal.ZERO);
 
         accountDao.saveAndFlush(account);
@@ -117,14 +117,14 @@ public class AccountService implements IAccountService {
         }
 
         if (!account.getCurrency().getId().equals(accountCreateDto.getCurrency())) {
-            CurrencyIdEntity currencyId = currencyService.get(accountCreateDto.getCurrency());
+            CurrencyInfoEntity newCurrency = currencyService.get(accountCreateDto.getCurrency());
 
             if (account.getBalance().compareTo(BigDecimal.ZERO) != 0) {
                 account.setBalance(moneyOperator.convertBalanceAmount(account.getBalance(),
                         accountCreateDto.getCurrency(), account.getCurrency().getId()));
             }
 
-            account.setCurrency(currencyId);
+            account.setCurrency(newCurrency);
         }
 
         account.setTitle(accountCreateDto.getTitle());

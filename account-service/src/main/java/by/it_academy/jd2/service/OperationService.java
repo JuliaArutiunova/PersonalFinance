@@ -2,7 +2,7 @@ package by.it_academy.jd2.service;
 
 import by.it_academy.jd2.dao.api.IOperationDao;
 import by.it_academy.jd2.dao.entity.AccountEntity;
-import by.it_academy.jd2.dao.entity.CurrencyIdEntity;
+import by.it_academy.jd2.dao.entity.CurrencyInfoEntity;
 import by.it_academy.jd2.dao.entity.OperationCategoryIdEntity;
 import by.it_academy.jd2.dao.entity.OperationEntity;
 import by.it_academy.jd2.dto.OperationCreateDto;
@@ -61,7 +61,7 @@ public class OperationService implements IOperationService {
     public void create(UUID accountId, OperationCreateDto operationCreateDto) {
         AccountEntity account = accountService.getAccountEntity(accountId);
 
-        CurrencyIdEntity currency = currencyService.get(operationCreateDto.getCurrency());
+        CurrencyInfoEntity newCurrency = currencyService.get(operationCreateDto.getCurrency());
 
         OperationCategoryIdEntity operationCategory = operationCategoryService
                 .get(operationCreateDto.getCategory());
@@ -74,7 +74,7 @@ public class OperationService implements IOperationService {
         operationEntity.setDescription(operationCreateDto.getDescription());
         operationEntity.setCategory(operationCategory);
         operationEntity.setValue(operationCreateDto.getValue());
-        operationEntity.setCurrency(currency);
+        operationEntity.setCurrency(newCurrency);
 
         BigDecimal newBalance = moneyOperator.calculateBalance(account.getBalance(),
                 operationCreateDto.getValue(), account.getCurrency().getId(),
@@ -121,7 +121,7 @@ public class OperationService implements IOperationService {
             throw new DataChangedException();
         }
 
-        CurrencyIdEntity currency = currencyService.get(operationCreateDto.getCurrency());
+        CurrencyInfoEntity newCurrency = currencyService.get(operationCreateDto.getCurrency());
 
         OperationCategoryIdEntity operationCategory = operationCategoryService
                 .get(operationCreateDto.getCategory());
@@ -146,7 +146,7 @@ public class OperationService implements IOperationService {
                             .accountCurrency(account.getCurrency().getId())
                             .build());
 
-            operationEntity.setCurrency(currency);
+            operationEntity.setCurrency(newCurrency);
             account.setBalance(newBalance);
             accountService.save(account);
         }

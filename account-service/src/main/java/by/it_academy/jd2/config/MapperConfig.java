@@ -1,7 +1,7 @@
 package by.it_academy.jd2.config;
 
 
-import by.it_academy.jd2.dao.entity.CurrencyIdEntity;
+import by.it_academy.jd2.dao.entity.CurrencyInfoEntity;
 import by.it_academy.jd2.dao.entity.OperationCategoryIdEntity;
 
 import org.modelmapper.AbstractConverter;
@@ -46,9 +46,9 @@ public class MapperConfig {
         };
 
 
-        Converter<CurrencyIdEntity, UUID> currencyConverter = new AbstractConverter<CurrencyIdEntity, UUID>() {
+        Converter<CurrencyInfoEntity, UUID> currencyConverter = new AbstractConverter<CurrencyInfoEntity, UUID>() {
             @Override
-            protected UUID convert(CurrencyIdEntity currencyIdEntity) {
+            protected UUID convert(CurrencyInfoEntity currencyIdEntity) {
                 return currencyIdEntity.getId();
             }
         };

@@ -6,6 +6,7 @@ CREATE SCHEMA account_data
 CREATE TABLE IF NOT EXISTS account_data.currency
 (
     currency_id uuid NOT NULL,
+    title character varying(3) NOT NULL,
     CONSTRAINT currency_pkey PRIMARY KEY (currency_id)
 );
 

@@ -46,7 +46,7 @@ public class AccountEntity {
 
     @ManyToOne
     @JoinColumn(name = "currency_id", foreignKey = @ForeignKey(name = "currency_id_FK"))
-    private CurrencyIdEntity currency;
+    private CurrencyInfoEntity currency;
 
 
     @PrePersist

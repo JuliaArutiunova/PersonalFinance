@@ -56,7 +56,7 @@ public class CurrencyService implements ICurrencyService {
                 .build();
         currencyDao.saveAndFlush(currencyEntity);
 
-        accountClient.saveCurrencyId(currencyEntity.getId());
+        accountClient.saveCurrency(currencyEntity.getId(), currencyEntity.getTitle());
 
         sendCurrencyCreationAudit(currencyEntity.getId());
     }

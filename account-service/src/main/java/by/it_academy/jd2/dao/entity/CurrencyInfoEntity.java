@@ -15,8 +15,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "currency", schema = "account_data")
-public class CurrencyIdEntity {
+public class CurrencyInfoEntity {
     @Id
     @Column(name = "currency_id")
     private UUID id;
+    @Column
+    private String title;
 }

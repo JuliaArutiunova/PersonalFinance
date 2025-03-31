@@ -22,14 +22,15 @@ public class DataController {
 
     @PostMapping("/currency")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveCurrency(@RequestParam("currency_id") UUID currencyId){
-        currencyService.save(currencyId);
+    public void saveCurrency(@RequestParam("currency_id") UUID currencyId,
+                             @RequestParam String title) {
+        currencyService.save(currencyId, title);
     }
 
 
     @PostMapping("/operation_category")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveOperationCategory(@RequestParam("operation_category_id") UUID currencyId){
+    public void saveOperationCategory(@RequestParam("operation_category_id") UUID currencyId) {
         operationCategoryService.save(currencyId);
     }
 }
