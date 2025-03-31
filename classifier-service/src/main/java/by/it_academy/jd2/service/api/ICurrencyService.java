@@ -12,6 +12,5 @@ public interface ICurrencyService {
 
     PageDto<CurrencyDto> getCurrencyPage(int pageNumber, int size);
 
-    Map<UUID, String> getNames(UUID[] uuids);
 
 }

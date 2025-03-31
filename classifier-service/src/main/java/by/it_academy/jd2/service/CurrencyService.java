@@ -80,16 +80,6 @@ public class CurrencyService implements ICurrencyService {
     }
 
 
-    @Override
-    public Map<UUID, String> getNames(UUID[] uuids) {
-        List<CurrencyEntity> currencyEntities = currencyDao.findAllById(Arrays.asList(uuids));
-        Map<UUID, String> names = new HashMap<>();
-        currencyEntities.forEach(currencyEntity -> {
-            names.put(currencyEntity.getId(), currencyEntity.getTitle());
-        });
-        return names;
-    }
-
     @Async
     private void sendCurrencyCreationAudit(UUID entityId) {
         auditClient.createAudit(ActionInfoDto.builder()

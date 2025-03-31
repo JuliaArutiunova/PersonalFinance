@@ -2,26 +2,22 @@ package by.it_academy.jd2.service;
 
 import by.it_academy.jd2.dto.exchangeRate.ExchangeRateInfo;
 import by.it_academy.jd2.service.api.IClientService;
-import by.it_academy.jd2.service.feign.ClassifierClient;
 import by.it_academy.jd2.service.feign.CurrencyApiClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
-import java.util.Map;
-import java.util.UUID;
-
 @Service
 public class ClientService implements IClientService {
 
     private final CurrencyApiClient currencyApiClient;
-    private final ClassifierClient classifierClient;
+
     @Value("${client.currency-api.key}")
     private String currencyApiKey;
 
-    public ClientService(CurrencyApiClient currencyApiClient, ClassifierClient classifierClient) {
+    public ClientService(CurrencyApiClient currencyApiClient) {
         this.currencyApiClient = currencyApiClient;
-        this.classifierClient = classifierClient;
+
     }
 
     @Override
@@ -30,10 +26,6 @@ public class ClientService implements IClientService {
         return currencyApiClient.getExchangeRate(currencyApiKey, baseCurrency, currencies);
     }
 
-    @Override
-    public Map<UUID, String> getCurrencyNames(UUID... currencies) {
-        return classifierClient.getCurrencyNames(currencies);
-    }
 
 
     private String getCurrenciesParamString(String[] currency) {
