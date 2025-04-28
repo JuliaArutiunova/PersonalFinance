@@ -33,7 +33,14 @@ app:
     secret: NmIxNTkwNWUtYWQwZS00ZGM4LWE4MzctZjdlNDQ4ZTllMDlh
     issuer: ITAcademy
 
-
+logging:
+  file:
+    name: ./logs/user-service.log
+  level:
+    org.springframework.aop: DEBUG
+    org.aspectj: DEBUG
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{15} - %msg%n'
 
 
 

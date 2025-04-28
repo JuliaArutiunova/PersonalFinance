@@ -11,10 +11,9 @@ import org.springframework.stereotype.Service;
 public class MailSenderService {
 
     @Value("${spring.mail.username}")
-    private  String from;
+    private String from;
     @Value("${verification.subject}")
     private String verificationMessageSubject;
-
 
 
     private final JavaMailSender javaMailSender;
@@ -31,10 +30,7 @@ public class MailSenderService {
         message.setText(text);
         message.setFrom(from);
 
-        try {
-            javaMailSender.send(message);
-        } catch (MailException e) { //TODO log
-            throw new RuntimeException("Ошибка отправки письма",e);
-        }
+        javaMailSender.send(message);
+
     }
 }
